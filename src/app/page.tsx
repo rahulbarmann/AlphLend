@@ -1,10 +1,9 @@
-import React from 'react';
-import Home from '@/components/Home';
+import React from 'react'
 
 export default function HomePage() {
   return (
     <>
-      <Home />
+      <h1 className="text-3xl font-bold underline">Hello world!</h1>
     </>
   )
 }
