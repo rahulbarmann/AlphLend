@@ -20,7 +20,7 @@ export default function RootLayout({
       </head>
       <body>
         <AlephiumWalletProvider
-          theme="retro"
+          theme="midnight"
           network={'testnet'}
           // addressGroup={tokenFaucetConfig.groupIndex}
         >

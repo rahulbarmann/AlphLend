@@ -62,7 +62,7 @@ export default function LandingPage() {
                 alt="AlphLend DeFi"
                 className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
                 height="550"
-                src="https://img.freepik.com/free-photo/ai-cloud-concept-with-cube_23-2149739756.jpg?t=st=1730148943~exp=1730152543~hmac=e5ffbd133f5a585b778e2ce96304d52b359fcdccc8f1878349fb58784672802d&w=900"
+                src="https://img.freepik.com/free-vector/ultraviolet-banner-server-room-abstract-technology-objects-cloud-storage_39422-562.jpg?t=st=1730202008~exp=1730205608~hmac=073d1bc225f51a53a4027c27ea6674bf80a67aaa701c01a6f334a5bca4dd276c&w=900"
                 width="550"
               />
             </div>
