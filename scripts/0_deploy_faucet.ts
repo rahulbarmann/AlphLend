@@ -1,25 +1,17 @@
 import { Deployer, DeployFunction, Network } from '@alephium/cli'
 import { Settings } from '../alephium.config'
-import { TokenFaucet } from '../artifacts/ts'
+import { TokenVault } from '../artifacts/ts'
 
 // This deploy function will be called by cli deployment tool automatically
 // Note that deployment scripts should prefixed with numbers (starting from 0)
-const deployFaucet: DeployFunction<Settings> = async (
-  deployer: Deployer,
-  network: Network<Settings>
-): Promise<void> => {
-  // Get settings
-  const issueTokenAmount = network.settings.issueTokenAmount
-  const result = await deployer.deployContract(TokenFaucet, {
-    // The amount of token to be issued
-    issueTokenAmount: issueTokenAmount,
+const deployFaucet: DeployFunction<Settings> = async (deployer: Deployer): Promise<void> => {
+  const result = await deployer.deployContract(TokenVault, {
     // The initial states of the faucet contract
     initialFields: {
-      symbol: Buffer.from('TF', 'utf8').toString('hex'),
-      name: Buffer.from('TokenFaucet', 'utf8').toString('hex'),
-      decimals: 0n,
-      supply: issueTokenAmount,
-      balance: issueTokenAmount
+      tokenHeldId: '2AzrpxxrPTirUseiTUkkQUzMbwMPBpUcSG7B21rnb5uaP',
+      amountHeld: 0n,
+      tokenReleasedId: '29SH9mpQVXHrZ9xRpMpnKkq8CTqaY8FyFh4e4wuA4R1eF',
+      amountToRelease: 0n
     }
   })
   console.log('Token faucet contract id: ' + result.contractInstance.contractId)

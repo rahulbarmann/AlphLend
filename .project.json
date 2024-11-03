@@ -1,0 +1,20 @@
+{
+  "fullNodeVersion": "v3.8.5",
+  "compilerOptionsUsed": {
+    "ignoreUnusedConstantsWarnings": false,
+    "ignoreUnusedVariablesWarnings": false,
+    "ignoreUnusedFieldsWarnings": false,
+    "ignoreUnusedPrivateFunctionsWarnings": false,
+    "ignoreUpdateFieldsCheckWarnings": false,
+    "ignoreCheckExternalCallerWarnings": false,
+    "ignoreUnusedFunctionReturnWarnings": false
+  },
+  "infos": {
+    "TokenVault": {
+      "sourceFile": "token.ral",
+      "sourceCodeHash": "548ce33cdcdc2e5ac7f240a1f4542849c32052db0df349182265cbdb4f4449f8",
+      "bytecodeDebugPatch": "=8-1=1+e=2-2+af=39-1+9=78+7a7e0214696e73657274206174206d617020706174683a2000=182",
+      "codeHashDebug": "ecd992e668b79ea29667d634f1c2fc9ba16f3cf0b03122453422489656ab1470"
+    }
+  }
+}
