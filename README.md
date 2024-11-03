@@ -1,67 +1,91 @@
-# Alephium Next.js Template
+# 🏦 Lending and Borrowing DApp on Alephium
 
-This is a Alephium template project for [Next.js](https://nextjs.org/) app router.
+This DApp is built on the Alephium blockchain and allows users to securely borrow tokens against collateral deposits. Leveraging the unique features of Alephium’s ecosystem, this DApp implements a collateral-based lending and borrowing model with strict checks on loan repayment timing and accuracy.
 
-This template project demonstrates how to implement a simple token
-faucet and expose it with a Web UI using Next.js.
+## 🚀 Features
 
-## Getting Started
+- Collateralized Borrowing: Users secure loans with collateral deposits, minimizing the risk of default.
+- Time-Based Repayment Enforcement: Ensures that loans are repaid within 2 hours; otherwise, repayment is invalidated.
+- Flexible Repayment: Users can repay the loan and receive their collateral back if conditions are met.
+- Transparency and Security: Each action is recorded on-chain, and checks are in place to prevent under-collateralized borrowing and late repayments.
 
-### Install
+## ⚙️ Smart Contract Overview
 
-```
-npm install
-```
+The LendingBorrowing contract manages deposits, loans, and repayments. Key elements include:
 
-### Start a local devnet for testing and development
+- Collateral Token: The token type required as collateral.
+- Loan Token: The token type disbursed to users as a loan.
+- Collateral Ratio: The ratio of collateral required per loan token.
+- Borrowing and Repayment Checks: Ensures timely repayment and exact loan amounts to secure collateral release.
 
-Follow the instructions on the [Alephium Devnet Docker Guide](https://github.com/alephium/alephium-stack?tab=readme-ov-file#devnet) to start a local devnet.
+### Contract Fields
 
-For other options, see the [Alephium Devnet Guide](https://docs.alephium.org/full-node/getting-started#devnet).
+- collateralTokenId: The ID of the token accepted as collateral.
+- loanTokenId: The ID of the loan token.
+- collateralRatio: Defines how much collateral is needed per unit of loan token.
+- totalCollateral: Tracks the total collateral held by the contract.
 
-### Deploy the token faucet contract
+## 📢 Getting Started
 
-```bash
-# In this case devnet
-npm run devnet:deploy
-```
+### Prerequisites
 
-This will compile and deploy the token faucet contracts to all of the
-4 groups on devnet.
+1. Alephium Node: Set up a local Alephium node or connect to the testnet.
+2. Alephium CLI or SDK: Install the Alephium CLI or SDK to interact with the contract.
+3. Wallet: Create a wallet on Alephium and fund it with testnet tokens (if using testnet).
 
-Before deployment, you might want to just compile and test the
-contracts first:
+### Setup and Deployment
 
-```bash
-# Compile
-npm run compile
+1. Compile the Contract:
 
-# Test
-npm run test
-```
+   alephium-cli compile path/to/LendingBorrowing.ral
 
-### Run the development server
+2. Deploy the Contract:
+   Specify initial values for the contract fields such as collateralTokenId, loanTokenId, collateralRatio, and totalCollateral.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+   alephium-cli deploy path/to/compiled/LendingBorrowing.json --args collateralTokenId=<collateralTokenId> loanTokenId=<loanTokenId> collateralRatio=3 totalCollateral=0
 
-Open [http://localhost:3000](http://localhost:3000) with your browser
-to see the token faucet application.
+3. Initialize the Contract (optional):
+   Call any required initialization functions (if needed) to set up starting states or balances.
 
-Download the [Alephium Extension Wallet](https://github.com/alephium/extension-wallet)
-to interact with the application.
+### User Guide
 
-## Learn More
+#### Deposit Collateral
 
-To learn more about smart contract development on Alephium, take a
-look at the following resources:
+To start borrowing, users first need to deposit collateral:
+await lendingBorrowingContract.depositCollateral(callerAddress, collateralAmount);
 
-- [Alephium Web3 SDK Guide](https://docs.alephium.org/sdk/getting-started/) - Learn about Alephium Web3 SDK
-- [Ralph Language](https://docs.alephium.org/ralph/) - A guide to the Ralph programming language
+#### Borrow Tokens
 
-You can check out the [Alephium GitHub
-repositories](https://github.com/alephium) for more information - your
-feedback and contributions are welcome!
+Once the required collateral is deposited, users can call the borrow function to receive loan tokens:
+await lendingBorrowingContract.borrow(callerAddress);
+
+#### Repay Loan
+
+To return the loan and reclaim collateral, users can repay within the 2-hour time limit:
+await lendingBorrowingContract.repayLoan(callerAddress, repaymentAmount);
+If the repayment amount or timing conditions aren’t met, the transaction will fail.
+
+## 🚨 Error Codes
+
+- Error 1: Incorrect repayment amount.
+- Error 2: Repayment past due (after 2 hours).
+- Error 3: Insufficient collateral for release.
+
+## 💡 Future Plans
+
+- Cross-Chain Interoperability: Expand to support cross-chain collateral and loan transfers.
+- NFT Collateral: Allow NFTs as collateral to support new types of assets.
+- Credit Scoring: Integrate on-chain credit scoring for lower collateral requirements for trusted borrowers.
+- Governance and Community Control: Transition to DAO-based control, empowering the Alephium community to adjust protocol parameters.
+
+## 🤝 Contributing
+
+We welcome contributions! Feel free to open issues or pull requests for new features or bug fixes.
+
+## 📃 License
+
+This DApp is open-source and licensed under the MIT License.
+
+---
+
+This DApp demonstrates a secure, time-enforced lending solution on Alephium, showcasing the potential of decentralized finance on a scalable blockchain platform.
