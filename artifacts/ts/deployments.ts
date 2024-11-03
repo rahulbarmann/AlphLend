@@ -4,12 +4,20 @@
 
 import { RunScriptResult, DeployContractExecutionResult } from "@alephium/cli";
 import { NetworkId } from "@alephium/web3";
-import { TokenVault, TokenVaultInstance } from ".";
+import {
+  TokenVault,
+  TokenVaultInstance,
+  LendingBorrowing,
+  LendingBorrowingInstance,
+} from ".";
 import { default as devnetDeployments } from "../../deployments/.deployments.devnet.json";
 
 export type Deployments = {
   deployerAddress: string;
-  contracts: { TokenVault: DeployContractExecutionResult<TokenVaultInstance> };
+  contracts: {
+    TokenVault: DeployContractExecutionResult<TokenVaultInstance>;
+    LendingBorrowing: DeployContractExecutionResult<LendingBorrowingInstance>;
+  };
 };
 
 function toDeployments(json: any): Deployments {
@@ -18,6 +26,12 @@ function toDeployments(json: any): Deployments {
       ...json.contracts["TokenVault"],
       contractInstance: TokenVault.at(
         json.contracts["TokenVault"].contractInstance.address
+      ),
+    },
+    LendingBorrowing: {
+      ...json.contracts["LendingBorrowing"],
+      contractInstance: LendingBorrowing.at(
+        json.contracts["LendingBorrowing"].contractInstance.address
       ),
     },
   };

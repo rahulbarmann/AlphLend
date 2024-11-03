@@ -1,0 +1,122 @@
+{
+  "version": "v3.8.5",
+  "name": "LendingBorrowing",
+  "bytecode": "04031f408b414701010202000dd3e75e5ff11600ce001601aca00016012aa10006160016015f0102010300402dd38853e253a00017011601ce022d17021600d1a2140a5f5f6d61705f5f315f5f16004744b156d201010c0d0d140a5f5f6d61705f5f305f5f16004744cb010116022a0c0e0c140a5f5f6d61705f5f305f5f16004744cb01021600ce011602ab05160016025f01010204004056d30fcaa8e116010c0d0d140a5f5f6d61705f5f305f5f16004744cb01012f0d7b0c0d0d140a5f5f6d61705f5f315f5f16004744cb010117025616022b13806ddd00320e7b1600ce011601ac0c0d0d140a5f5f6d61705f5f305f5f16004744cb010116012b0c0e0c140a5f5f6d61705f5f305f5f16004744cb010216000d0c140a5f5f6d61705f5f315f5f16004744cb01031601ce022c1703a0001603340f7ba00016032ba1001600ce001603ab0716001601160360",
+  "codeHash": "c16f1d8ce740a6486c87867e892b8739e4d01dcb70eaf2ada3619ec8f05ff68f",
+  "fieldsSig": {
+    "names": [
+      "collateralTokenId",
+      "loanTokenId",
+      "collateralRatio",
+      "totalCollateral"
+    ],
+    "types": [
+      "ByteVec",
+      "ByteVec",
+      "U256",
+      "U256"
+    ],
+    "isMutable": [
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "eventsSig": [
+    {
+      "name": "LoanGranted",
+      "fieldNames": [
+        "borrower",
+        "loanAmount"
+      ],
+      "fieldTypes": [
+        "Address",
+        "U256"
+      ]
+    },
+    {
+      "name": "CollateralDeposited",
+      "fieldNames": [
+        "depositor",
+        "collateralAmount"
+      ],
+      "fieldTypes": [
+        "Address",
+        "U256"
+      ]
+    },
+    {
+      "name": "LoanRepaid",
+      "fieldNames": [
+        "borrower",
+        "repaymentAmount",
+        "collateralReturned"
+      ],
+      "fieldTypes": [
+        "Address",
+        "U256",
+        "U256"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "depositCollateral",
+      "paramNames": [
+        "caller",
+        "collateralAmount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "borrow",
+      "paramNames": [
+        "caller"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "repayLoan",
+      "paramNames": [
+        "caller",
+        "repaymentAmount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    }
+  ],
+  "constants": [],
+  "enums": [],
+  "mapsSig": {
+    "names": [
+      "borrowedAmount",
+      "loanTimestamp"
+    ],
+    "types": [
+      "Map[Address,U256]",
+      "Map[Address,U256]"
+    ]
+  }
+}

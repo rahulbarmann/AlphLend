@@ -3,12 +3,12 @@
 /* eslint-disable */
 
 import { Contract, ContractFactory } from "@alephium/web3";
-import { TokenVault } from ".";
+import { LendingBorrowing } from ".";
 
 let contracts: ContractFactory<any>[] | undefined = undefined;
 export function getContractByCodeHash(codeHash: string): Contract {
   if (contracts === undefined) {
-    contracts = [TokenVault];
+    contracts = [LendingBorrowing];
   }
   const c = contracts.find((c) => c.contract.hasCodeHash(codeHash));
   if (c === undefined) {

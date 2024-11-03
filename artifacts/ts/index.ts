@@ -2,5 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export * from "./TokenVault";
+export * from "./LendingBorrowing";
 export * from "./scripts";

@@ -1,46 +1,53 @@
-Contract TokenVault(tokenHeldId: ByteVec, mut amountHeld: U256, tokenReleasedId: ByteVec, amountToRelease: U256) {
-    // Mapping to store the last deposit timestamp for each depositor
-    mapping[Address, U256] depositorTimestamp
-    
-    event TokenReleased(to: Address, amount: U256)
-    event DepositRecorded(depositor: Address, timestamp: U256)
+Contract LendingBorrowing(collateralTokenId: ByteVec, loanTokenId: ByteVec, collateralRatio: U256, mut totalCollateral: U256) {
+    mapping[Address, U256] borrowedAmount
+    mapping[Address, U256] loanTimestamp
 
+    event LoanGranted(borrower: Address, loanAmount: U256)
+    event CollateralDeposited(depositor: Address, collateralAmount: U256)
+    event LoanRepaid(borrower: Address, repaymentAmount: U256, collateralReturned: U256)
 
-    // Initialization function to set the initial amountHeld to zero
-    @using(updateFields = true, checkExternalCaller = false)
-    pub fn initialize() -> () {
-        amountHeld = 0
-    }
-
-    // Function to deposit tokens into the vault and record the time
     @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
-    pub fn deposit(caller: Address, depositAmount: U256) -> () {
-        transferTokenToSelf!(caller, tokenHeldId, depositAmount)
+    pub fn depositCollateral(caller: Address, collateralAmount: U256) -> () {
+        transferTokenToSelf!(caller, collateralTokenId, collateralAmount)
+
+        totalCollateral = totalCollateral + collateralAmount
         
-        // Update the mutable amountHeld with the new deposit
-        amountHeld = amountHeld + depositAmount
-        
-        // Record the current block timestamp for the caller
-        depositorTimestamp.insert!(caller, caller, blockTimeStamp!())
-        
-        // Emit an event with the depositor's address and timestamp
-        emit DepositRecorded(caller, blockTimeStamp!())
+        emit CollateralDeposited(caller, collateralAmount)
     }
 
-    // Function to check if 2 minutes have passed since the last deposit and release tokens if true
     @using(assetsInContract = true, checkExternalCaller = false)
-    pub fn releaseIfAllowed(to: Address) -> () {
-        // Retrieve the last deposit time for the caller
-        assert!(depositorTimestamp.contains!(to), 1)
-        let lastDepositTime = depositorTimestamp[to]
+    pub fn borrow(caller: Address) -> () {
+        let collateral = totalCollateral
+        let loanAmount = collateral / collateralRatio
 
-        // Check if 2 minutes (120,000 milliseconds) have passed since the last deposit
-        assert!(blockTimeStamp!() - lastDepositTime >= 120000, 2)
+        loanTimestamp.insert!(caller, caller, blockTimeStamp!())
+        
+        borrowedAmount[caller] = borrowedAmount[caller] + loanAmount
 
-        // Release tokens if 2 minutes have passed
-        transferTokenFromSelf!(to, tokenReleasedId, amountToRelease)
+        transferTokenFromSelf!(caller, loanTokenId, loanAmount)
 
-        // Emit event for token release
-        emit TokenReleased(to, amountToRelease)
+        emit LoanGranted(caller, loanAmount)
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn repayLoan(caller: Address, repaymentAmount: U256) -> () {
+        assert!(repaymentAmount == borrowedAmount[caller], 1) // Error 1: Incorrect repayment amount
+
+        let borrowTime = loanTimestamp[caller]
+        assert!(blockTimeStamp!() - borrowTime <= 7200000, 2) // Error 2: Repayment past due
+
+        transferTokenToSelf!(caller, loanTokenId, repaymentAmount)
+
+        borrowedAmount[caller] = borrowedAmount[caller] - repaymentAmount
+        loanTimestamp.remove!(caller, caller)
+
+        let collateralToReturn = repaymentAmount * collateralRatio
+        assert!(totalCollateral >= collateralToReturn, 3) // Error 3: Insufficient collateral in contract
+
+        totalCollateral = totalCollateral - collateralToReturn
+
+        transferTokenFromSelf!(caller, collateralTokenId, collateralToReturn)
+
+        emit LoanRepaid(caller, repaymentAmount, collateralToReturn)
     }
 }
